@@ -1,5 +1,6 @@
 ﻿using BankingApplicationExercise.Dtos;
 using BankingApplicationExercise.Entities;
+using BankingApplicationExercise.Enums;
 using BankingApplicationExercise.Interfaces;
 using BankingApplicationExercise.Resources;
 
@@ -50,11 +51,13 @@ namespace BankingApplicationExercise.Services
 
         public AccountDto Create(CreateAccountResource createAccountResource)
         {
-            if (createAccountResource.InitialDeposit < 100)
+            var initialDepositLimit = 100;
+            var validAccountTypes = new List<int>() { (int)AccountType.Checking, (int)AccountType.Savings };
+            if (createAccountResource.InitialDeposit < initialDepositLimit)
             {
-                throw new Exception("Initial deposit must be at least $100");
+                throw new Exception($"Initial deposit must be at least ${initialDepositLimit}");
             }
-            if (createAccountResource.AccountTypeId != 1 && createAccountResource.AccountTypeId != 2)
+            if (!validAccountTypes.Contains(createAccountResource.AccountTypeId))
             {
                 throw new Exception("Invalid account type");
             }
