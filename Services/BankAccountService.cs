@@ -40,6 +40,14 @@ namespace BankingApplicationExercise.Services
             return result;
         }
 
+        public ClosedAccountDto Close(CloseResource closeResource)
+        {
+            var account = BankAccountRepository.Close(closeResource);
+            var result = ClosedAccountMapper(account);
+
+            return result;
+        }
+
         private AccountBalanceDto AccountBalanceMapper(BankAccount account)
         {
             var accountBalanceDto = new AccountBalanceDto()
@@ -51,6 +59,18 @@ namespace BankingApplicationExercise.Services
             };
 
             return accountBalanceDto;
+        }
+
+        private ClosedAccountDto ClosedAccountMapper(BankAccount account)
+        {
+            var closedAccountDto = new ClosedAccountDto()
+            {
+                CustomerId = account.CustomerId,
+                AccountId = account.AccountId,
+                Succeeded = true
+            };
+
+            return closedAccountDto;
         }
     }
 }

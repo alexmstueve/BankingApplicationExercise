@@ -62,5 +62,26 @@ namespace BankingApplicationExercise.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPut("close")]
+        public IActionResult Close(CloseResource closeResource)
+        {
+            try
+            {
+                AuthenticationService.Authenticate(closeResource);
+
+                var result = BankAccountService.Close(closeResource);
+
+                return Ok(result);
+            }
+            catch (AuthenticationException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

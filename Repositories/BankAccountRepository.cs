@@ -26,7 +26,7 @@ namespace BankingApplicationExercise.Repositories
 
         public BankAccount Deposit(DepositResource resource)
         {
-            BankAccount account = Accounts.FirstOrDefault(a => a.AccountId == resource.AccountId);
+            var account = Accounts.FirstOrDefault(a => a.AccountId == resource.AccountId);
 
             if (account == null)
             {
@@ -35,6 +35,11 @@ namespace BankingApplicationExercise.Repositories
             else if (account.CustomerId != resource.CustomerId)
             {
                 throw new Exception("Account does not belong to this customer");
+            }
+
+            if (!account.IsActive)
+            {
+                throw new Exception("Cannot deposit into a closed account");
             }
 
             account.Balance += resource.Amount;
@@ -44,7 +49,7 @@ namespace BankingApplicationExercise.Repositories
 
         public BankAccount Withdrawal(WithdrawalResource resource)
         {
-            BankAccount account = Accounts.FirstOrDefault(a => a.AccountId == resource.AccountId);
+            var account = Accounts.FirstOrDefault(a => a.AccountId == resource.AccountId);
 
             if (account == null)
             {
@@ -55,12 +60,40 @@ namespace BankingApplicationExercise.Repositories
                 throw new Exception("Account does not belong to this customer");
             }
 
+            if (!account.IsActive)
+            {
+                throw new Exception("Cannot withrawal from a closed account");
+            }
+
             if (account.Balance - resource.Amount < 0)
             {
                 throw new Exception("Withdrawal would bring account balance below 0");
             }
 
             account.Balance -= resource.Amount;
+
+            return account;
+        }
+
+        public BankAccount Close(CloseResource resource)
+        {
+            var account = Accounts.FirstOrDefault(a => a.AccountId == resource.AccountId);
+
+            if (account == null)
+            {
+                throw new Exception("Account does not exist");
+            }
+            else if (account.CustomerId != resource.CustomerId)
+            {
+                throw new Exception("Account does not belong to this customer");
+            }
+
+            if (account.Balance != 0)
+            {
+                throw new Exception("Account balance must be 0 in order to close");
+            }
+
+            account.IsActive = false;
 
             return account;
         }

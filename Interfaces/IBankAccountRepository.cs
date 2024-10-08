@@ -7,5 +7,6 @@ namespace BankingApplicationExercise.Services
     {
         public BankAccount Deposit(DepositResource resource);
         public BankAccount Withdrawal(WithdrawalResource resource);
+        public BankAccount Close(CloseResource resource);
     }
 }

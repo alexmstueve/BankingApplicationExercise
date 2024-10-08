@@ -7,5 +7,6 @@ namespace BankingApplicationExercise.Interfaces
     {
         public AccountBalanceDto Deposit(DepositResource depositResource);
         public AccountBalanceDto Withdrawal(WithdrawalResource withdrawalResource);
+        public ClosedAccountDto Close(CloseResource closeResource);
     }
 }
