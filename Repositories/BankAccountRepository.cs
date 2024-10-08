@@ -41,5 +41,28 @@ namespace BankingApplicationExercise.Repositories
 
             return account;
         }
+
+        public BankAccount Withdrawal(WithdrawalResource resource)
+        {
+            BankAccount account = Accounts.FirstOrDefault(a => a.AccountId == resource.AccountId);
+
+            if (account == null)
+            {
+                throw new Exception("Account does not exist");
+            }
+            else if (account.CustomerId != resource.CustomerId)
+            {
+                throw new Exception("Account does not belong to this customer");
+            }
+
+            if (account.Balance - resource.Amount < 0)
+            {
+                throw new Exception("Withdrawal would bring account balance below 0");
+            }
+
+            account.Balance -= resource.Amount;
+
+            return account;
+        }
     }
 }

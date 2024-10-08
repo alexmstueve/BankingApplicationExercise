@@ -6,5 +6,6 @@ namespace BankingApplicationExercise.Services
     public interface IBankAccountRepository
     {
         public BankAccount Deposit(DepositResource resource);
+        public BankAccount Withdrawal(WithdrawalResource resource);
     }
 }

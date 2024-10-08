@@ -42,25 +42,25 @@ namespace BankingApplicationExercise.Controllers
             }
         }
 
-        //[HttpPut("withdrawal")]
-        //public IActionResult Withdrawal(WithdrawalResource withdrawalResource)
-        //{
-        //    try
-        //    {
-        //        AuthenticationService.Authenticate(depositResource);
+        [HttpPut("withdrawal")]
+        public IActionResult Withdrawal(WithdrawalResource withdrawalResource)
+        {
+            try
+            {
+                AuthenticationService.Authenticate(withdrawalResource);
 
-        //        var result = BankAccountService.Deposit(depositResource);
+                var result = BankAccountService.Withdrawal(withdrawalResource);
 
-        //        return Ok(result);
-        //    }
-        //    catch (AuthenticationException ex)
-        //    {
-        //        return Unauthorized(ex.Message);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+                return Ok(result);
+            }
+            catch (AuthenticationException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

@@ -27,6 +27,19 @@ namespace BankingApplicationExercise.Services
             return result;
         }
 
+        public AccountBalanceDto Withdrawal(WithdrawalResource withdrawalResource)
+        {
+            if (withdrawalResource.Amount <= 0)
+            {
+                throw new Exception("Withdrawal amount must be greater than 0");
+            }
+
+            var account = BankAccountRepository.Withdrawal(withdrawalResource);
+            var result = AccountBalanceMapper(account);
+
+            return result;
+        }
+
         private AccountBalanceDto AccountBalanceMapper(BankAccount account)
         {
             var accountBalanceDto = new AccountBalanceDto()
