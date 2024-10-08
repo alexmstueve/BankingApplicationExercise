@@ -3,16 +3,20 @@ using BankingApplicationExercise.Entities;
 using BankingApplicationExercise.Enums;
 using BankingApplicationExercise.Interfaces;
 using BankingApplicationExercise.Resources;
+using Microsoft.Extensions.Options;
 
 namespace BankingApplicationExercise.Services
 {
     public class BankAccountService : IBankAccountService
     {
         private IBankAccountRepository BankAccountRepository { get; set; }
+        private readonly AppConfigurationDto AppConfiguration;
 
-        public BankAccountService(IBankAccountRepository bankAccountRepository)
+        public BankAccountService(IBankAccountRepository bankAccountRepository,
+            IOptions<AppConfigurationDto> appConfiguration)
         {
             BankAccountRepository = bankAccountRepository;
+            AppConfiguration = appConfiguration.Value;
         }
 
         public AccountBalanceDto Deposit(DepositResource depositResource)
@@ -51,8 +55,8 @@ namespace BankingApplicationExercise.Services
 
         public AccountDto Create(CreateAccountResource createAccountResource)
         {
-            var initialDepositLimit = 100;
-            var validAccountTypes = new List<int>() { (int)AccountType.Checking, (int)AccountType.Savings };
+            var initialDepositLimit = AppConfiguration.MinimumInitialDeposit;
+            var validAccountTypes = AppConfiguration.AllowedAccountTypes.Split(",").Select(int.Parse);
             if (createAccountResource.InitialDeposit < initialDepositLimit)
             {
                 throw new Exception($"Initial deposit must be at least ${initialDepositLimit}");

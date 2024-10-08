@@ -1,15 +1,18 @@
 ﻿using System.Resources;
+using BankingApplicationExercise.Dtos;
 using BankingApplicationExercise.Entities;
 using BankingApplicationExercise.Enums;
 using BankingApplicationExercise.Resources;
 using BankingApplicationExercise.Services;
+using Microsoft.Extensions.Options;
 
 namespace BankingApplicationExercise.Repositories
 {
     public class BankAccountRepository : IBankAccountRepository
     {
         private List<BankAccount> Accounts { get; set; }
-        public BankAccountRepository() 
+        private readonly AppConfigurationDto AppConfiguration;
+        public BankAccountRepository(IOptions<AppConfigurationDto> appConfiguration) 
         {
             Accounts = new List<BankAccount>()
             {
@@ -22,6 +25,8 @@ namespace BankingApplicationExercise.Repositories
                     IsActive = true
                 }
             };
+
+            AppConfiguration = appConfiguration.Value;
         }
 
         public BankAccount Deposit(DepositResource resource)
@@ -102,9 +107,11 @@ namespace BankingApplicationExercise.Repositories
         {
             var accounts = Accounts.Where(a => a.CustomerId == resource.CustomerId);
 
-            if (accounts.Count() == 0 && resource.AccountTypeId != (int)AccountType.Savings)
+            var validFirstAccountTypes = AppConfiguration.AllowedFirstAccountTypes.Split(",").Select(int.Parse);
+
+            if (accounts.Count() == 0 && !validFirstAccountTypes.Contains(resource.AccountTypeId))
             {
-                throw new Exception("New customers first account must be savings");
+                throw new Exception("Invalid inital account type");
             }
 
             var nextAccountId = Accounts.OrderByDescending(a => a.AccountId).First().AccountId;

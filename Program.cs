@@ -1,3 +1,4 @@
+using BankingApplicationExercise.Dtos;
 using BankingApplicationExercise.Interfaces;
 using BankingApplicationExercise.Repositories;
 using BankingApplicationExercise.Services;
@@ -17,6 +18,15 @@ builder.Services.AddScoped<IBankAccountService, BankAccountService>();
 
 // Add repositories
 builder.Services.AddSingleton<IBankAccountRepository, BankAccountRepository>();
+
+// Add configuration
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+builder.Services.Configure<AppConfigurationDto>(
+    builder.Configuration.GetSection("AppConfiguration")
+);
+
 
 var app = builder.Build();
 
