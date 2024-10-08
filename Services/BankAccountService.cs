@@ -63,7 +63,7 @@ namespace BankingApplicationExercise.Services
             }
             if (!validAccountTypes.Contains(createAccountResource.AccountTypeId))
             {
-                throw new Exception("Invalid account type");
+                throw new Exception($"Invalid account type, must be in type(s): {AppConfiguration.AllowedAccountTypes}");
             }
 
             var account = BankAccountRepository.Create(createAccountResource);

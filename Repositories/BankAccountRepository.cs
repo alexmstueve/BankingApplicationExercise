@@ -32,10 +32,15 @@ namespace BankingApplicationExercise.Repositories
         public BankAccount Deposit(DepositResource resource)
         {
             var account = Accounts.FirstOrDefault(a => a.AccountId == resource.AccountId);
+            var customer = Accounts.FirstOrDefault(a => a.CustomerId == resource.CustomerId);
 
             if (account == null)
             {
                 throw new Exception("Account does not exist");
+            }
+            else if (customer == null)
+            {
+                throw new Exception("Customer does not exist");
             }
             else if (account.CustomerId != resource.CustomerId)
             {
@@ -55,10 +60,15 @@ namespace BankingApplicationExercise.Repositories
         public BankAccount Withdrawal(WithdrawalResource resource)
         {
             var account = Accounts.FirstOrDefault(a => a.AccountId == resource.AccountId);
+            var customer = Accounts.FirstOrDefault(a => a.CustomerId == resource.CustomerId);
 
             if (account == null)
             {
                 throw new Exception("Account does not exist");
+            }
+            else if (customer == null)
+            {
+                throw new Exception("Customer does not exist");
             }
             else if (account.CustomerId != resource.CustomerId)
             {
@@ -83,10 +93,15 @@ namespace BankingApplicationExercise.Repositories
         public BankAccount Close(CloseAccountResource resource)
         {
             var account = Accounts.FirstOrDefault(a => a.AccountId == resource.AccountId);
+            var customer = Accounts.FirstOrDefault(a => a.CustomerId == resource.CustomerId);
 
             if (account == null)
             {
                 throw new Exception("Account does not exist");
+            }
+            else if (customer == null)
+            {
+                throw new Exception("Customer does not exist");
             }
             else if (account.CustomerId != resource.CustomerId)
             {
@@ -96,6 +111,11 @@ namespace BankingApplicationExercise.Repositories
             if (account.Balance != 0)
             {
                 throw new Exception("Account balance must be 0 in order to close");
+            }
+
+            if (!account.IsActive)
+            {
+                throw new Exception("Account is already closed");
             }
 
             account.IsActive = false;
@@ -111,7 +131,7 @@ namespace BankingApplicationExercise.Repositories
 
             if (accounts.Count() == 0 && !validFirstAccountTypes.Contains(resource.AccountTypeId))
             {
-                throw new Exception("Invalid inital account type");
+                throw new Exception($"Invalid inital account type, must be in type(s): {AppConfiguration.AllowedFirstAccountTypes}");
             }
 
             var nextAccountId = Accounts.OrderByDescending(a => a.AccountId).First().AccountId;
