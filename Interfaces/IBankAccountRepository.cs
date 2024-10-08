@@ -1,7 +1,7 @@
 ﻿using BankingApplicationExercise.Entities;
 using BankingApplicationExercise.Resources;
 
-namespace BankingApplicationExercise.Services
+namespace BankingApplicationExercise.Interfaces
 {
     public interface IBankAccountRepository
     {

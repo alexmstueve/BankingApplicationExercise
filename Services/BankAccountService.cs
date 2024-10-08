@@ -1,6 +1,5 @@
 ﻿using BankingApplicationExercise.Dtos;
 using BankingApplicationExercise.Entities;
-using BankingApplicationExercise.Enums;
 using BankingApplicationExercise.Interfaces;
 using BankingApplicationExercise.Resources;
 using Microsoft.Extensions.Options;

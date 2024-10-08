@@ -1,6 +1,4 @@
-﻿using BankingApplicationExercise.Enums;
-
-namespace BankingApplicationExercise.Resources
+﻿namespace BankingApplicationExercise.Resources
 {
     public class CreateAccountResource
     {

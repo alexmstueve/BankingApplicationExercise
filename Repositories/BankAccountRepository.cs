@@ -1,9 +1,8 @@
-﻿using System.Resources;
-using BankingApplicationExercise.Dtos;
+﻿using BankingApplicationExercise.Dtos;
 using BankingApplicationExercise.Entities;
 using BankingApplicationExercise.Enums;
+using BankingApplicationExercise.Interfaces;
 using BankingApplicationExercise.Resources;
-using BankingApplicationExercise.Services;
 using Microsoft.Extensions.Options;
 
 namespace BankingApplicationExercise.Repositories
