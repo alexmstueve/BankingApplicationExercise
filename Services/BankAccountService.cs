@@ -40,10 +40,27 @@ namespace BankingApplicationExercise.Services
             return result;
         }
 
-        public ClosedAccountDto Close(CloseResource closeResource)
+        public ClosedAccountDto Close(CloseAccountResource closeResource)
         {
             var account = BankAccountRepository.Close(closeResource);
             var result = ClosedAccountMapper(account);
+
+            return result;
+        }
+
+        public AccountDto Create(CreateAccountResource createAccountResource)
+        {
+            if (createAccountResource.InitialDeposit < 100)
+            {
+                throw new Exception("Initial deposit must be at least $100");
+            }
+            if (createAccountResource.AccountTypeId != 1 && createAccountResource.AccountTypeId != 2)
+            {
+                throw new Exception("Invalid account type");
+            }
+
+            var account = BankAccountRepository.Create(createAccountResource);
+            var result = AccountMapper(account);
 
             return result;
         }
@@ -71,6 +88,20 @@ namespace BankingApplicationExercise.Services
             };
 
             return closedAccountDto;
+        }
+
+        private AccountDto AccountMapper(BankAccount account)
+        {
+            var accountDto = new AccountDto()
+            {
+                AccountId = account.AccountId,
+                AccountTypeId = account.AccountTypeId,
+                Balance = account.Balance,
+                CustomerId = account.CustomerId,
+                Succeeded = true
+            };
+
+            return accountDto;
         }
     }
 }

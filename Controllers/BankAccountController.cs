@@ -64,13 +64,34 @@ namespace BankingApplicationExercise.Controllers
         }
 
         [HttpPut("close")]
-        public IActionResult Close(CloseResource closeResource)
+        public IActionResult Close(CloseAccountResource closeResource)
         {
             try
             {
                 AuthenticationService.Authenticate(closeResource);
 
                 var result = BankAccountService.Close(closeResource);
+
+                return Ok(result);
+            }
+            catch (AuthenticationException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("create")]
+        public IActionResult Create(CreateAccountResource createResource)
+        {
+            try
+            {
+                AuthenticationService.Authenticate(createResource);
+
+                var result = BankAccountService.Create(createResource);
 
                 return Ok(result);
             }

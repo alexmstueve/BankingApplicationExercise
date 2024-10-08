@@ -75,7 +75,7 @@ namespace BankingApplicationExercise.Repositories
             return account;
         }
 
-        public BankAccount Close(CloseResource resource)
+        public BankAccount Close(CloseAccountResource resource)
         {
             var account = Accounts.FirstOrDefault(a => a.AccountId == resource.AccountId);
 
@@ -96,6 +96,33 @@ namespace BankingApplicationExercise.Repositories
             account.IsActive = false;
 
             return account;
+        }
+
+        public BankAccount Create(CreateAccountResource resource)
+        {
+            var accounts = Accounts.Where(a => a.CustomerId == resource.CustomerId);
+
+            if (accounts.Count() == 0 && resource.AccountTypeId != (int)AccountType.Savings)
+            {
+                throw new Exception("New customers first account must be savings");
+            }
+
+            var nextAccountId = Accounts.OrderByDescending(a => a.AccountId).First().AccountId;
+
+            nextAccountId++;
+
+            var newAccount = new BankAccount()
+            {
+                AccountId = nextAccountId,
+                AccountTypeId = (AccountType)resource.AccountTypeId,
+                Balance = resource.InitialDeposit,
+                CustomerId = resource.CustomerId,
+                IsActive = true
+            };
+
+            Accounts.Add(newAccount);
+
+            return newAccount;
         }
     }
 }
